@@ -1,41 +1,10 @@
 from datetime import date
-import database
-import os
-import platform
+import availableDatabase as adb
+import screenCleaner as sc
 import availableBooksManager as abm 
 # availableBooksManager modülünü abm olarak içe aktarıyoruz ve o şekilde kullanıcaz.
 # Artık şu şekilde kullabiliyoruz: abm.add_available_book() gibisinden.
-import screenCleaner as sc
 
-# Mevcut Kitaplar için nesne üretilecek sınıf tanımlaması
-class avaliableBooks():
-    def __init__(self,name,pages,writer,adder,added_date):
-        self.name = name
-        self.pages = pages
-        self.writer = writer
-        self.adder = adder
-        self.added_date = added_date
-    
-    def __repr__(self):
-        return f"{self.name} - {self.writer} ({self.pages} sayfa, Ekleyen: {self.adder}, Tarih: {self.added_date})"
-        
-# İstek Kitaplar için nesne üretilecek sınıf tanımlaması    
-class requestBook():
-    def __init__(self,name,pages,writer,requester,url1,price1,url2,price2):
-        self.name = name
-        self.pages = pages
-        self.writer = writer
-        self.requester = requester
-        self.url1 = url1
-        self.price1 = price1
-        self.url2 = url2
-        self.price2 = price2
-        
-# Kullanıcı işlemleri için nesne üretilecek sınıf tanımlaması    
-class user():
-    def __init__(self,name):
-        self.name = name
-        
     
 def show_available_books_menu():
     print("\n -- Mevcut Kitaplar --")
@@ -133,7 +102,7 @@ def handle_admins():
             print("Geçersiz seçim!")
             
 def main():
-    database.initialize_database()
+    adb.initialize_database()
     while True:
         choice = show_main_menu()
         if choice == '1':

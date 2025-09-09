@@ -1,9 +1,10 @@
-import database
-
+import availableDatabase as adb # availableDatabase modülünü adb olarak içe aktarıyoruz
+from datetime import date
+from models import avaliableBooks # Sınıfımızı modeller dosyasından alıyoruz
 
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
 def add_available_book():
-    """Kullanicidan kitap bilgilerini alir, doğrular ve database fonksiyonunu cagirir."""
+    """Kullanicidan kitap bilgilerini alir, bir nesne oluşturur ve database'e ekler."""
     print("\n-- Yeni Kitap Ekle --")
     name = input("Kitap Adi: ")
     writer = input("Yazar: ")
@@ -35,9 +36,24 @@ def add_available_book():
 
     # Tarihi otomatik alıyoruz
     added_date = date.today().strftime("%Y-%m-%d")
+    
+    # 1. Adım: Kullanıcıdan alınan bilgilerle bir 'avaliableBooks' nesnesi oluştur.
+    new_book = avaliableBooks(
+        name=name, 
+        pages=pages, 
+        writer=writer, 
+        adder=adder, 
+        added_date=added_date
+    )
 
-    # Tüm doğrulanmış bilgileri toplayıp, database modülündeki fonksiyona yolluyoruz.
-    database.add_new_available_book(name, pages, writer, adder, added_date)
+    # 2. Adım: Oluşturulan nesnenin niteliklerini veritabanı fonksiyonuna gönder.
+    adb.add_new_available_book(
+        new_book.name, 
+        new_book.pages, 
+        new_book.writer, 
+        new_book.adder, 
+        new_book.added_date
+    )
 
 
 def delete_available_book():
@@ -57,7 +73,7 @@ def delete_available_book():
         book_id_to_delete = int(id_input)
         
         # Yeni database fonksiyonumuzu çağırıyoruz
-        database.delete_book_by_id(book_id_to_delete)
+        adb.delete_book_by_id(book_id_to_delete)
         
     except ValueError:
         # Eğer kullanıcı sayı dışında bir şey girerse bu hata bloğu çalışır
@@ -68,7 +84,7 @@ def delete_available_book():
 
 def display_books_table():
     """Veritabanindan kitaplari alir ve tablo formatında ekrana yazdirir."""
-    all_books = database.get_all_available_books()
+    all_books = adb.get_all_available_books()
     
     print("\n--- Kütüphanedeki Mevcut Kitaplar ---")
     if not all_books:
@@ -97,7 +113,7 @@ def update_available_book():
         book_id = int(id_input)
         
         # 2. O kitaba ait mevcut bilgileri veritabanından çek
-        current_book = database.get_book_by_id(book_id)
+        current_book = adb.get_book_by_id(book_id)
         
         if not current_book:
             print(f"\n[!] ID'si {book_id} olan bir kitap bulunamadı.")
@@ -125,7 +141,7 @@ def update_available_book():
                 print("Hata: Lütfen geçerli bir sayfa sayısı girin.")
 
         # 4. Veritabanını yeni bilgilerle güncelle
-        database.update_book_by_id(book_id, new_name, new_writer, new_pages)
+        adb.update_book_by_id(book_id, new_name, new_writer, new_pages)
 
     except ValueError:
         print("\n[!] Hata: Lütfen geçerli bir ID (sayı) girin.")

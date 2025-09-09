@@ -50,3 +50,6 @@ def add_request_book():
 
     # Tüm doğrulanmış bilgileri toplayıp, database modülündeki fonksiyona yolluyoruz.
     qdb.add_new_available_book(name, pages, writer, adder,url, added_date)
+
+
+#   BURADA KALINDI 

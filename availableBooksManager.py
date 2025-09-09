@@ -4,7 +4,7 @@ from models import avaliableBooks # Sınıfımızı modeller dosyasından alıyo
 
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
 def add_available_book():
-    """Kullanicidan kitap bilgilerini alir, bir nesne oluşturur ve database'e ekler."""
+    """Kullanicidan kitap bilgilerini alir availableBook sinifindan bir nesne oluşturur bilgi aktarimini sağlar ve database'e ekler."""
     print("\n-- Yeni Kitap Ekle --")
     name = input("Kitap Adi: ")
     writer = input("Yazar: ")
@@ -37,7 +37,7 @@ def add_available_book():
     # Tarihi otomatik alıyoruz
     added_date = date.today().strftime("%Y-%m-%d")
     
-    # 1. Adım: Kullanıcıdan alınan bilgilerle bir 'avaliableBooks' nesnesi oluştur.
+    # Kullanıcıdan alınan bilgilerle bir 'avaliableBooks' nesnesi oluştur.
     new_book = avaliableBooks(
         name=name, 
         pages=pages, 
@@ -45,8 +45,7 @@ def add_available_book():
         adder=adder, 
         added_date=added_date
     )
-
-    # 2. Adım: Oluşturulan nesnenin niteliklerini veritabanı fonksiyonuna gönder.
+    # Oluşturulan nesnenin niteliklerini veritabanı fonksiyonuna gönder.
     adb.add_new_available_book(
         new_book.name, 
         new_book.pages, 

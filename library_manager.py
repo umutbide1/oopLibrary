@@ -2,6 +2,7 @@ from datetime import date
 import availableDatabase as adb
 import screenCleaner as sc
 import availableBooksManager as abm 
+import requestBookManager as rbm 
 # availableBooksManager modülünü abm olarak içe aktarıyoruz ve o şekilde kullanıcaz.
 # Artık şu şekilde kullabiliyoruz: abm.add_available_book() gibisinden.
 

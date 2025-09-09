@@ -1,7 +1,6 @@
 import sqlite3
-
 # Bu dosyanın sorumluluğundaki sabitler
-DB_FILE = "library.db"
+DB_FILE = "libraryDB\\library.db"
 
 def initialize_database():
     """Veritabanini ve tablolari (eğer yoksa) oluşturur."""
@@ -53,8 +52,7 @@ def initialize_database():
 # Yani aslında her ekleme fonksiyonuna karşılık db ye kayıt için de fonksiyon var.
 def add_new_available_book(name, pages, writer, adder, added_date):
     """
-    Parametre olarak verilen kitap bilgilerini veritabanına ekler.
-    Bu fonksiyon KESİNLİKLE input() kullanmaz!
+    Parametre olarak verilen kitap bilgilerini veritabanina ekler.
     """
     try:
         conn = sqlite3.connect(DB_FILE)
@@ -68,10 +66,10 @@ def add_new_available_book(name, pages, writer, adder, added_date):
         cursor.execute(sql_command, book_data)
         conn.commit()
         
-        print(f"\n[✓] '{name}' adlı kitap veritabanına başarıyla eklendi.")
+        print(f"\n[✓] '{name}' adli kitap veritabanina başariyla eklendi.")
 
     except sqlite3.Error as e:
-        print(f"Veritabanı hatası oluştu: {e}")
+        print(f"Veritabani hatasi oluştu: {e}")
         
     finally:
         if 'conn' in locals() and conn:
@@ -80,12 +78,12 @@ def add_new_available_book(name, pages, writer, adder, added_date):
 
 # Kitap silme fonksiyonu database için
 def delete_book_by_id(book_id):
-    """Verilen ID'ye sahip kitabı siler ve silinen kitabın adını mesajda gösterir."""
+    """Verilen ID'ye sahip kitabi siler ve silinen kitabin adini mesajda gösterir."""
     try:
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
         
-        # 1. SİLMEDEN ÖNCE: Kitabın adını öğrenmek için bir sorgu yapalım.
+        # SİLMEDEN ÖNCE: Kitabın adını öğrenmek için bir sorgu yapalım.
         cursor.execute("SELECT name FROM available_books WHERE id = ?", (book_id,))
         book_to_delete = cursor.fetchone() # Sonucu al (None veya (isim,) şeklinde gelir)
         
@@ -94,14 +92,9 @@ def delete_book_by_id(book_id):
             print(f"\n[!] ID'si {book_id} olan bir kitap bulunamadı.")
             return # Fonksiyondan çık
 
-        # Kitabın adını değişkene alalım. book_to_delete[0] -> ('Martin Eden',)[0] -> 'Martin Eden'
         book_name = book_to_delete[0]
-
-        # 3. SİLME İŞLEMİ: Artık kitabı silebiliriz.
         cursor.execute("DELETE FROM available_books WHERE id = ?", (book_id,))
         conn.commit()
-        
-        # 4. BİLGİLENDİRME: Öğrendiğimiz ismi kullanarak mesajı yazdır.
         print(f"\n[✓] '{book_name}' adlı kitap başarıyla silindi.")
 
     except sqlite3.Error as e:
@@ -159,7 +152,7 @@ def update_book_by_id(book_id, new_name, new_writer, new_pages):
     # BU YENİ FONKSİYONU database.py DOSYASININ EN ALTINA EKLE
 
 def get_book_by_id(book_id):
-    """Verilen ID'ye sahip tek bir kitabın tüm bilgilerini döndürür."""
+    """Verilen ID'ye sahip tek bir kitabin tüm bilgilerini döndürür."""
     try:
         conn = sqlite3.connect(DB_FILE)
         # Veriyi sözlük gibi (sütun adlarıyla) almak için row_factory kullanıyoruz.

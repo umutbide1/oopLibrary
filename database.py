@@ -129,3 +129,50 @@ def get_all_available_books():
     finally:
         if 'conn' in locals() and conn:
             conn.close()
+            
+def update_book_by_id(book_id, new_name, new_writer, new_pages):
+    """Verilen ID'ye sahip kitabın bilgilerini günceller."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        
+        sql_command = """
+            UPDATE available_books
+            SET name = ?,
+                writer = ?,
+                pages = ?
+            WHERE id = ?
+        """
+        
+        cursor.execute(sql_command, (new_name, new_writer, new_pages, book_id))
+        conn.commit()
+        
+        print(f"\n[✓] 'Kitap başarıyla güncellendi.")
+
+    except sqlite3.Error as e:
+        print(f"Veritabanı hatası oluştu: {e}")
+        
+    finally:
+        if 'conn' in locals() and conn:
+            conn.close()
+            
+    # BU YENİ FONKSİYONU database.py DOSYASININ EN ALTINA EKLE
+
+def get_book_by_id(book_id):
+    """Verilen ID'ye sahip tek bir kitabın tüm bilgilerini döndürür."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        # Veriyi sözlük gibi (sütun adlarıyla) almak için row_factory kullanıyoruz.
+        # Bu sayede current_book['name'] gibi kullanımlar yapabiliyoruz.
+        conn.row_factory = sqlite3.Row 
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM available_books WHERE id = ?", (book_id,))
+        book_data = cursor.fetchone() # Tek bir sonuç alıyoruz
+        
+        conn.close()
+        return book_data # None (bulamazsa) veya bir satır nesnesi (bulursa) döndürür
+
+    except sqlite3.Error as e:
+        print(f"Veritabanı hatası oluştu: {e}")
+        return None

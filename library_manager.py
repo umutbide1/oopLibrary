@@ -99,7 +99,7 @@ def delete_available_book():
 
 
 def display_books_table():
-    """Veritabanından kitapları alır ve tablo formatında ekrana yazdırır."""
+    """Veritabanindan kitaplari alir ve tablo formatında ekrana yazdirir."""
     all_books = database.get_all_available_books()
     
     print("\n--- Kütüphanedeki Mevcut Kitaplar ---")
@@ -114,6 +114,58 @@ def display_books_table():
         print(f"{book[0]:<4} | {book[1]:<30} | {book[2]:<25} | {str(book[3]):>5} | {book[4]:<10}")
     print("-" * 85)
 
+def update_available_book():
+    """Kullanıcıdan ID alarak bir kitabı güncelleme işlemini yönetir."""
+    print("\n--- Mevcut Kitap Bilgilerini Güncelle ---")
+    display_books_table()
+    
+    try:
+        # 1. Güncellenecek kitabın ID'sini al
+        id_input = input("\nGüncellemek istediğiniz kitabın ID'sini girin (İptal için Enter'a basın): ")
+        if not id_input:
+            print("İşlem iptal edildi.")
+            return
+        
+        book_id = int(id_input)
+        
+        # 2. O kitaba ait mevcut bilgileri veritabanından çek
+        current_book = database.get_book_by_id(book_id)
+        
+        if not current_book:
+            print(f"\n[!] ID'si {book_id} olan bir kitap bulunamadı.")
+            return
+
+        print("\n--- Mevcut Bilgiler ---")
+        print(f"Kitap Adı: {current_book['name']}")
+        print(f"Yazar: {current_book['writer']}")
+        print(f"Sayfa Sayısı: {current_book['pages']}")
+        print("\nYeni bilgileri girin. Değiştirmek istemiyorsanız doğrudan Enter'a basın.")
+        
+        # 3. Kullanıcıdan yeni bilgileri al (Enter'a basarsa eskisi kalır)
+        new_name = input(f"Yeni Kitap Adı [{current_book['name']}]: ") or current_book['name']
+        new_writer = input(f"Yeni Yazar [{current_book['writer']}]: ") or current_book['writer']
+        
+        while True:
+            new_pages_input = input(f"Yeni Sayfa Sayısı [{current_book['pages']}]: ")
+            if not new_pages_input: # Enter'a basıldıysa
+                new_pages = current_book['pages']
+                break
+            elif new_pages_input.isdigit(): # Sayı girildiyse
+                new_pages = int(new_pages_input)
+                break
+            else:
+                print("Hata: Lütfen geçerli bir sayfa sayısı girin.")
+
+        # 4. Veritabanını yeni bilgilerle güncelle
+        database.update_book_by_id(book_id, new_name, new_writer, new_pages)
+
+    except ValueError:
+        print("\n[!] Hata: Lütfen geçerli bir ID (sayı) girin.")
+    except KeyboardInterrupt:
+        print("\nİşlem iptal edildi.")
+        
+
+    
 def show_available_books_menu():
     print("\n -- Mevcut Kitaplar --")
     print("1-) Mevcut Listeye Kitap Ekle ")
@@ -163,7 +215,7 @@ def handle_available_books():
         elif choice == '3':
             display_books_table()
         elif choice == '4':
-            print("[!] Mevcut kitap güncelleme fonksiyonu yakında eklenecek.")
+            update_available_book()
             pass
         elif choice == '5':
             print("Ana menüye dönülüyor...")

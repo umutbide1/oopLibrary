@@ -69,7 +69,7 @@ def handle_request_books():
         choice = show_request_books_menu()
         sc.clear_screen()
         if choice == '1':
-            print("[!] İstek kitap ekleme fonksiyonu yakında eklenecek.")
+            rbm.add_request_book()
             pass
         elif choice == '2':
             print("[!] İstek kitap silme fonksiyonu yakında eklenecek.")

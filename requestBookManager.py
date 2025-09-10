@@ -1,9 +1,10 @@
 import requestDatabase as qdb # requestDatabase modülünü qdb olarak içe aktarıyoruz
-import datetime as date
+from datetime import date
+from models import requestBooks # Sınıfımızı modeller dosyasından alıyoruz
 
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
 def add_request_book():
-    """Kullanicidan istek kitap bilgilerini alir, doğrular ve request tablosuna eklemek üzere database fonksiyonunu cagirir."""
+    """Kullanicidan istek kitap bilgilerini alir, request tablosuna eklemek üzere database fonksiyonunu cagirir."""
     print("\n-- Yeni İstek Kitap Ekle --")
     name = input("Kitap Adi: ")
     
@@ -48,8 +49,25 @@ def add_request_book():
     # Tarihi otomatik alıyoruz
     added_date = date.today().strftime("%Y-%m-%d")
 
+    new_requestBook=requestBooks(
+        name=name, 
+        pages=pages, 
+        writer=writer, 
+        adder=adder, 
+        url=url,
+        price=price,
+        added_date=added_date
+    )
     # Tüm doğrulanmış bilgileri toplayıp, database modülündeki fonksiyona yolluyoruz.
-    qdb.add_new_available_book(name, pages, writer, adder,url, added_date)
-    
+    qdb.add_new_request_book(
+        name,
+        pages,
+        writer,
+        adder,
+        url,
+        price,
+        added_date
+    )
+
 
 #   BURADA KALINDI 

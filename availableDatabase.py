@@ -26,11 +26,10 @@ def initialize_database():
             name TEXT NOT NULL,
             pages TEXT,
             writer TEXT,
-            requester TEXT,
-            url1 TEXT,
-            price1 TEXT,
-            url2 TEXT,
-            price2 TEXT
+            adder TEXT,
+            url TEXT,
+            price TEXT,
+            added_date TEXT
         )
     ''')
     

@@ -1,6 +1,6 @@
 import sqlite3
 # Bu dosyanın sorumluluğundaki sabitler
-DB_FILE = "libraryDB\\library.db"
+DB_FILE = "library.db"
 
 def initialize_database():
     """Veritabanini ve tablolari (eğer yoksa) oluşturur."""

@@ -1,7 +1,7 @@
-import requestDatabase as qdb # requestDatabase modülünü qdb olarak içe aktarıyoruz
+import requestDatabase as rdb # requestDatabase modülünü rdb olarak içe aktarıyoruz
 from datetime import date
 from models import requestBooks # Sınıfımızı modeller dosyasından alıyoruz
-
+import availableBooksManager as abm
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
 def add_request_book():
     """Kullanicidan istek kitap bilgilerini alir, request tablosuna eklemek üzere database fonksiyonunu cagirir."""
@@ -59,7 +59,7 @@ def add_request_book():
         added_date=added_date
     )
     # Tüm doğrulanmış bilgileri toplayıp, database modülündeki fonksiyona yolluyoruz.
-    qdb.add_new_request_book(
+    rdb.add_new_request_book(
         name,
         pages,
         writer,
@@ -70,4 +70,42 @@ def add_request_book():
     )
 
 
-#   BURADA KALINDI 
+def delete_request_book():
+    """Kullanicidan silinecek istek kitap ID'sini alir, request tablosundan silmek üzere database fonksiyonunu cagirir."""
+    print("\n-- İstek Kitap Sil --")
+    display_books_table() # Önce mevcut kitapları ve ID'lerini göster
+    try:
+        id_input = input("\nSilmek istediğiniz kitabin ID'sini girin (İptal için Enter'a basin): ")
+
+        # Eğer kullanıcı bir şey girmeden Enter'a basarsa işlemi iptal et
+        if not id_input:
+            print("İşlem iptal edildi.")
+            return
+
+        # Girilen değerin bir sayı olduğundan emin ol, değilse hata verecek
+        book_id_to_delete = int(id_input)
+        
+        # Yeni database fonksiyonumuzu çağırıyoruz
+        rdb.delete_book_by_id(book_id_to_delete)
+        
+    except ValueError:
+        # Eğer kullanıcı sayı dışında bir şey girerse bu hata bloğu çalışır
+        print("\n[!] Hata: Lütfen geçerli bir ID (sayı) girin.")
+    except KeyboardInterrupt:
+        print("\nİşlem iptal edildi.")
+
+def display_books_table():
+    """Veritabanindan kitaplari alir ve tablo formatında ekrana yazdirir."""
+    all_books = rdb.get_all_available_books()
+    
+    print("\n--- Kütüphanedeki Mevcut Kitaplar ---")
+    if not all_books:
+        print("Kütüphanede hiç mevcut kitap bulunmuyor.")
+        return
+
+    print(f"{'ID':<4} | {'Kitap Adı':<30} | {'Yazar':<25} | {'Sayfa':>5} | {'Ekleyen':<10}")
+    print("-" * 85)
+    for book in all_books:
+        # book[0]=id, book[1]=name, book[2]=writer, book[3]=pages, book[4]=adder
+        print(f"{book[0]:<4} | {book[1]:<30} | {book[2]:<25} | {str(book[3]):>5} | {book[4]:<10}")
+    print("-" * 85)

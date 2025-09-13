@@ -75,7 +75,7 @@ def handle_request_books():
             rbm.delete_request_book()
             pass
         elif choice == '3':
-            print("[!] İstek kitap listeleme fonksiyonu yakında eklenecek.")
+            rbm.display_books_table()
             pass
         elif choice == '4':
             print("[!] İstek kitap güncelleme fonksiyonu yakında eklenecek.")

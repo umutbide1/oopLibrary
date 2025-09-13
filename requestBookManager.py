@@ -3,6 +3,8 @@ from datetime import date
 from models import requestBooks # Sınıfımızı modeller dosyasından alıyoruz
 import availableBooksManager as abm
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
+
+
 def add_request_book():
     """Kullanicidan istek kitap bilgilerini alir, request tablosuna eklemek üzere database fonksiyonunu cagirir."""
     print("\n-- Yeni İstek Kitap Ekle --")

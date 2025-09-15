@@ -1,6 +1,6 @@
 # Bu dosya, projenin veri modellerini (sınıflarını) barındırır.
 
-class avaliableBooks():
+class avaliableBook():
     def __init__(self,name,pages,writer,adder,added_date):
         self.name = name
         self.pages = pages
@@ -11,7 +11,7 @@ class avaliableBooks():
     def __repr__(self):
         return f"{self.name} - {self.writer} ({self.pages} sayfa, Ekleyen: {self.adder}, Tarih: {self.added_date})"
         
-class requestBooks():
+class requestBook():
     def __init__(self,name,pages,writer,adder,url,price,added_date):
         self.name = name
         self.pages = pages

@@ -56,7 +56,7 @@ def delete_book_by_id(book_id_to_delete):
             if 'conn' in locals() and conn:
                 conn.close()  
 
-def get_all_available_books():
+def get_all_request_books():
     """Veritabanındaki tüm mevcut kitapları bir liste olarak döndürür."""
     try:
         conn = sqlite3.connect(DB_FILE)
@@ -71,6 +71,58 @@ def get_all_available_books():
     except sqlite3.Error as e:
         print(f"Veritabanı hatası oluştu: {e}")
         return [] # Hata durumunda boş bir liste döndür
+        
+    finally:
+        if 'conn' in locals() and conn:
+            conn.close()
+
+
+def get_book_by_id(book_id):
+    """Verilen ID'ye sahip tek bir kitabin tüm bilgilerini döndürür."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        # Veriyi sözlük gibi (sütun adlarıyla) almak için row_factory kullanıyoruz.
+        # Bu sayede current_book['name'] gibi kullanımlar yapabiliyoruz.
+        conn.row_factory = sqlite3.Row 
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM request_books WHERE id = ?", (book_id,))
+        book_data = cursor.fetchone() # Tek bir sonuç alıyoruz
+        
+        conn.close()
+        return book_data # None (bulamazsa) veya bir satır nesnesi (bulursa) döndürür
+
+    except sqlite3.Error as e:
+        print(f"Veritabanı hatası oluştu: {e}")
+        return None
+    
+
+
+def update_book_by_id(book_id, name, pages, writer, adder, url, price, added_date):
+    """Verilen ID'ye sahip kitabın bilgilerini günceller."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        
+        sql_command = """
+            UPDATE request_books
+            SET name = ?,
+                pages = ?,
+                writer = ?,
+                adder = ?,
+                url = ?,
+                price = ?,
+                added_date = ?
+            WHERE id = ?
+        """
+        
+        cursor.execute(sql_command, (name, pages, writer, adder, url, price, added_date, book_id))
+        conn.commit()
+        
+        print(f"\n[✓] '{name}' adlı kitap başarıyla güncellendi.")
+
+    except sqlite3.Error as e:
+        print(f"Veritabanı hatası oluştu: {e}")
         
     finally:
         if 'conn' in locals() and conn:

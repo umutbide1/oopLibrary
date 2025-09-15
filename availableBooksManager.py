@@ -1,6 +1,6 @@
 import availableDatabase as adb # availableDatabase modülünü adb olarak içe aktarıyoruz
 from datetime import date
-from models import avaliableBooks # Sınıfımızı modeller dosyasından alıyoruz
+from models import avaliableBook # Sınıfımızı modeller dosyasından alıyoruz
 
 # Kullanıcı Arayüzünden gelen bilgiler doğrultusunda database'e Mevcut kitap ekleyen kod bloğu
 def add_available_book():
@@ -38,7 +38,7 @@ def add_available_book():
     added_date = date.today().strftime("%Y-%m-%d")
     
     # Kullanıcıdan alınan bilgilerle bir 'avaliableBooks' nesnesi oluştur.
-    new_book = avaliableBooks(
+    new_book = avaliableBook(
         name=name, 
         pages=pages, 
         writer=writer, 
@@ -56,7 +56,7 @@ def add_available_book():
 
 
 def delete_available_book():
-    """Kullanıcıdan ID alarak silme işlemini yönetir."""
+    """Kullanicidan ID alarak silme işlemini yönetir."""
     print("\n--- Mevcut Listeden Kitap Sil ---")
     display_books_table() # Önce mevcut kitapları ve ID'lerini göster
     
@@ -98,7 +98,7 @@ def display_books_table():
     print("-" * 85)
 
 def update_available_book():
-    """Kullanıcıdan ID alarak bir kitabı güncelleme işlemini yönetir."""
+    """Kullanicidan ID alarak bir kitabı güncelleme işlemini yönetir."""
     print("\n--- Mevcut Kitap Bilgilerini Güncelle ---")
     display_books_table()
     

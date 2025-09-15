@@ -78,7 +78,7 @@ def handle_request_books():
             rbm.display_books_table()
             pass
         elif choice == '4':
-            print("[!] İstek kitap güncelleme fonksiyonu yakında eklenecek.")
+            rbm.update_request_book()
             pass
         elif choice == '5':
             print("Ana menüye dönülüyor...")
